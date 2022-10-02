@@ -1,4 +1,3 @@
-drop table if exists company;
 create table company
 (
     id   integer primary key,

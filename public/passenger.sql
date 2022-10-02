@@ -1,4 +1,3 @@
-drop table if exists passenger;
 create table passenger
 (
     id   integer primary key,

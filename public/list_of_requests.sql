@@ -1,0 +1,20 @@
+select name from passenger;
+select name from company;
+select * from trip where town_from = 'Moscow';
+select name from passenger where name like '%man';
+select count(*) as count from trip where plane = 'TU-134';
+select distinct name from company join trip on company.id = trip.company where plane = 'Boeing';
+select distinct plane from trip where town_to = 'Moscow';
+select town_to, extract(epoch from time_in - time_out) as flight_time from trip where town_from = 'Paris';
+select distinct name from company join trip on company.id = trip.company where town_from = 'Vladivostok';
+select * from trip where time_out between '1900-01-01 10:00:00' and '1900-01-01 14:00:00';
+select name from passenger where length(name) = (select max(length(name)) from passenger);
+select trip, count(passenger) as count from pass_in_trip group by trip;
+select name from passenger group by name having count(name) > 1;
+select distinct town_to from trip join pass_in_trip on trip.id = pass_in_trip.trip join passenger on pass_in_trip.passenger = passenger.id where name = 'Bruce Willis';
+select time_in from trip join pass_in_trip on trip.id = pass_in_trip.trip join passenger on pass_in_trip.passenger = passenger.id where name = 'Steve Martin' and town_to = 'London';
+/*select name, count(*) as count from passenger join pass_in_trip on passenger.id = pass_in_trip.passenger group by passenger having count(trip) > 0 order by count (trip) desc, name;*/
+select count(*) as count from trip where town_from = 'Rostov' and town_to = 'Moscow';
+select distinct name from passenger join pass_in_trip on pass_in_trip.passenger = passenger.id join trip on trip.id = pass_in_trip.trip where town_to = 'Moscow' and plane = 'TU-134';
+delete from company where company.id in (select company from trip group by company having count(id) = (select min(count) from (select count(id) as count from trip group by company) as min_count));
+delete from trip where town_from = 'Moscow';

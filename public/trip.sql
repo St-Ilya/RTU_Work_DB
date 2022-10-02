@@ -1,4 +1,3 @@
-drop table if exists trip;
 create table trip
 (
     id        integer primary key,
@@ -20,3 +19,15 @@ INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VAL
 INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (1182, 1, 'TU-134', 'Moscow', 'Rostov', '1900-01-01T12:35:00.000Z', '1900-01-01T14:30:00.000Z');
 INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (1187, 1, 'TU-134', 'Rostov', 'Moscow', '1900-01-01T15:42:00.000Z', '1900-01-01T17:39:00.000Z');
 INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (1188, 1, 'TU-134', 'Moscow', 'Rostov', '1900-01-01T22:50:00.000Z', '1900-01-02T00:48:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (1195, 1, 'TU-154', 'Rostov', 'Moscow', '1900-01-01T23:30:00.000Z', '1900-01-02T01:11:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (1196, 1, 'TU-154', 'Moscow', 'Rostov', '1900-01-01T04:00:00.000Z', '1900-01-01T05:45:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (7771, 5, 'Boeing', 'London', 'Singapore', '1900-01-01T01:00:00.000Z', '1900-01-01T11:00:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (7772, 5, 'Boeing', 'Singapore', 'London', '1900-01-01T12:00:00.000Z', '1900-01-02T02:00:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (7773, 5, 'Boeing', 'London', 'Singapore', '1900-01-01T03:00:00.000Z', '1900-01-01T13:00:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (7774, 5, 'Boeing', 'Singapore', 'London', '1900-01-01T14:00:00.000Z', '1900-01-02T06:00:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (7775, 5, 'Boeing', 'London', 'Singapore', '1900-01-01T09:00:00.000Z', '1900-01-01T20:00:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (7776, 5, 'Boeing', 'Singapore', 'London', '1900-01-01T18:00:00.000Z', '1900-01-02T08:00:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (7777, 5, 'Boeing', 'London', 'Singapore', '1900-01-01T18:00:00.000Z', '1900-01-02T06:00:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (7778, 5, 'Boeing', 'Singapore', 'London', '1900-01-01T22:00:00.000Z', '1900-01-02T12:00:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (8881, 5, 'Boeing', 'London', 'Paris', '1900-01-01T03:00:00.000Z', '1900-01-01T04:00:00.000Z');
+INSERT INTO trip (id, company, plane, town_from, town_to, time_out, time_in) VALUES (8882, 5, 'Boeing', 'Paris', 'London', '1900-01-01T22:00:00.000Z', '1900-01-01T23:00:00.000Z');
