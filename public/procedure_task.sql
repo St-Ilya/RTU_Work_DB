@@ -17,3 +17,14 @@ ALTER FUNCTION tripAfterDate(after timestamp without time zone)
     OWNER TO postgres;
 
 ----------------------------------------------------------------------------------------------
+
+CREATE OR REPLACE PROCEDURE CountTable (IN wao character varying, INOUT numberOfLines integer)
+LANGUAGE 'pspgsql'
+AS $BODY$
+    BEGIN
+    EXECUTE 'Select count(*) From'|| quote_ident(wao) INTO numberOfLines;
+    -- RAISE NOTICE 'count -> %', cnt;
+    end;
+$BODY$;
+ALTER PROCEDURE CountTable(character varying, integer)
+OWNER TO postgres;
