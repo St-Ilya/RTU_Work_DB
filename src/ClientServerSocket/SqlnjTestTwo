@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.management.relation.Role;
 
-public class SqlInjTest {
+public class SqlInjTestTwo {
     public static List<Employee> func(String name) {
 String sql = "select * from employee where name ='" + name + "'";
 Statement dataSource;
