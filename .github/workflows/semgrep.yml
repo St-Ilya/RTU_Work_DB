@@ -56,19 +56,19 @@ jobs:
               pr = newPr;
             }
             core.setOutput("prNumber", pr.number);
-  
+    
       - name: Add Comment with Semgrep Results
-        if: steps.pr-check.outputs.prNumber != 'null'
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const semgrepResults = fs.readFileSync('semgrep.json', 'utf8');
-            const prNumber = core.getInput('prNumber', { required: true });
-            await github.issues.createComment({
-              issue_number: prNumber,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `Semgrep analysis results:\n\`\`\`json\n${semgrepResults}\n\`\`\``,
-            });
+       if: steps.pr-check.outputs.prNumber != 'null'
+       uses: actions/github-script@v3
+       with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         script: |
+           const fs = require('fs');
+           const semgrepResults = fs.readFileSync('semgrep.json', 'utf8');
+           const prNumber = core.getInput('prNumber', { required: true });
+           await github.issues.createComment({
+             issue_number: prNumber,
+             owner: context.repo.owner,
+             repo: context.repo.repo,
+             body: `Semgrep analysis results:\n\`\`\`json\n${semgrepResults}\n\`\`\``,
+              });
