@@ -19,64 +19,56 @@ jobs:
           semgrep \
             --json --output semgrep.json\
             --metrics=off \
-            --config="p/default" | awk '
-            BEGIN { RS=""; FS="\n"; OFS="\n" }
-            {
-                # Extract and clean file path
-                file_path = $2
-                gsub(/\x1b\[[0-9;]*m/, "", file_path)
-                gsub(/^ */, "", file_path)
-            
-                # Extract rule ID
-                rule_id = $3
-                gsub(/^ */, "", rule_id)
-            
-                # Extract message and clean it
-                message = ""
-                for (i = 4; i <= NF; i++) {
-                    if ($i ~ /^[0-9]+┆/) break
-                    message = message $i " "
-                }
-                gsub(/^ */, "", message)
-                gsub(/\x1b\[[0-9;]*m/, "", message)
-            
-                # Extract code line
-                code_line = $i
-                gsub(/^ */, "", code_line)
-            
-                # Print formatted output
-                #print message
-                #print "Line: " code_line
-                #print ""
-                print message "\nLine: " code_line "\n"
-            }'
+            --config="p/default"
 
       - name: Save report
         uses: actions/upload-artifact@v4
         with:
-          name: parsed_results
+          name: semgrep_report
           path: semgrep.json
 
       - name: Display in the console
         run: |
           cat semgrep.json
-
-      - name: Display in the PR
+      
+      - name: Check & Update/Create PR
+        id: pr-check
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: | 
-            const { data: pullRequest } = await github.pulls.get({
+            const { data: pullRequests } = await github.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: context.issue.number
+              state: 'open',
             });
-            const issue_number = pullRequest.number;
-            const log = 'Your job logs'; // Replace with your actual job logs
-            const message = `Job Logs:\n\`\`\`${log}\`\`\``;
-            github.issues.createComment({
-              issue_number: issue_number,
+            const branchName = context.ref.replace('refs/heads/', '');
+            let pr = pullRequests.find(pr => pr.head.ref === branchName);
+            if (!pr) {
+              const { data: newPr } = await github.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Semgrep results for ${branchName}`,
+                head: branchName,
+                base: 'main', // Update to your default branch
+                body: 'This PR contains Semgrep analysis results.',
+              });
+              pr = newPr;
+            }
+            return { prNumber: pr.number };
+  
+      - name: Add Comment with Semgrep Results
+        if: steps.pr-check.outputs.prNumber != ''
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const semgrepResults = fs.readFileSync('semgrep.json', 'utf8');
+            const prNumber = core.getInput('prNumber');
+            await github.issues.createComment({
+              issue_number: prNumber,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: message
+              body: `Semgrep analysis results:\n\`\`\`json\n${semgrepResults}\n\`\`\``,
             });
