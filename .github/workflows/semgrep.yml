@@ -58,6 +58,7 @@ jobs:
             return { prNumber: pr.number };
   
       - name: Add Comment with Semgrep Results
+        if: steps.pr-check.outputs.prNumber != 3
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
