@@ -33,7 +33,7 @@ jobs:
       
       - name: Check & Update/Create PR
         id: pr-check
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: | 
@@ -55,7 +55,7 @@ jobs:
               });
               pr = newPr;
             }
-            return { prNumber: pr.number };
+            core.setOutput('prNumber', pr.number);
   
       - name: Add Comment with Semgrep Results
         if: steps.pr-check.outputs.prNumber != ''
