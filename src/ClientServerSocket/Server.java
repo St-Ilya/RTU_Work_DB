@@ -6,12 +6,12 @@ import java.net.Socket;
 
 public class Server {
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
 
         int count = 0;
         ServerSocket serverSocket = new ServerSocket(8000);
 
-        while(true) {
+        while (true) {
             Socket clientSocket = serverSocket.accept();
 
             System.out.println("Client accepted " + (++count));
@@ -32,7 +32,7 @@ public class Server {
             clientSocket.close();
         }
 
-
-        //serverSocket.close();
+        // serverSocket.close();
+        // add new test
     }
 }
