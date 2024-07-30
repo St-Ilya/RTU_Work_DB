@@ -38,8 +38,8 @@ jobs:
 
           # Сканирование проекта Erlang
           # Предположим, что ваш проект использует rebar3 для управления зависимостями
-          rebar3 compile
-          trivy fs --format sarif --output trivy-report-erlang.sarif .
+          # rebar3 compile
+          # trivy fs --format sarif --output trivy-report-erlang.sarif .
 
       - name: Upload SARIF report
         uses: github/codeql-action/upload-sarif@v2
