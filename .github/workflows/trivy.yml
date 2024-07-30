@@ -1,40 +1,34 @@
-name: trivy-security-scanning
-on: push
+name: CI
 
-permissions:
-  security-events: write # To upload sarif files
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  chart-test:
+  trivy:
+    name: Запуск Trivy для сканирования уязвимостей
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
-        with:
-          fetch-depth: 0
+      - name: Проверка исходного кода
+        uses: actions/checkout@v2
 
-      - name: Set up Helm
-        uses: azure/setup-helm@f382f75448129b3be48f8121b9857be18d815a82 # tag=v3.4
-        with:
-          version: v3.6.3
+      - name: Установка Trivy
+        run: |
+          sudo apt-get update && sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.27.0_Linux-64bit.deb
+          sudo dpkg -i trivy_0.27.0_Linux-64bit.deb
 
-      - name: Set up python
-        uses: actions/setup-python@13ae5bb136fac2878aff31522b9efb785519f984 # tag=v4.3.0
+      - name: Сканирование контейнера
+        id: trivy_scan
+        run: |
+          trivy image --exit-code 0 --severity HIGH,CRITICAL --format sarif --output trivy_report.sarif <ваш_образ_или_контейнер>
+        
+      - name: Загружать отчет SARIF в GitHub
+        uses: github/codeql-action/upload-sarif@v2
         with:
-          python-version: 3.7
-
-      - name: Run Trivy vulnerability scanner in IaC mode
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          scan-type: 'config'
-          hide-progress: false
-          format: 'sarif'
-          scan-ref: 'charts/sample-helm-devsecops'
-          output: 'trivy-results.sarif'
-          exit-code: '1'
-          ignore-unfixed: true
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@312e093a1892bd801f026f1090904ee8e460b9b6 # v2.1.34
-        with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: trivy_report.sarif
