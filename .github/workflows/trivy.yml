@@ -42,8 +42,8 @@ jobs:
           # trivy fs --format sarif --output trivy-report-erlang.sarif .
 
       - name: Upload SARIF report
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: |
             trivy-report-java.sarif
-            trivy-report-erlang.sarif
+            # trivy-report-erlang.sarif
