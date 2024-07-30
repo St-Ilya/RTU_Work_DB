@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: trivy-report-java.sarif
-          path: trivy.sarif
+          path: trivy-report-java.sarif
   
       - name: Upload SARIF report
         uses: github/codeql-action/upload-sarif@v3.25.7
