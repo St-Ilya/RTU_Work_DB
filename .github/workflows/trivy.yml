@@ -15,13 +15,12 @@ jobs:
 
     steps:
       - name: Проверка исходного кода
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Установка Trivy
         run: |
-          sudo apt-get update && sudo apt-get install -y wget
-          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.27.0_Linux-64bit.deb
-          sudo dpkg -i trivy_0.27.0_Linux-64bit.deb
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.39.1/trivy_0.39.1_Linux-64bit.deb
+          sudo dpkg -i trivy_0.39.1_Linux-64bit.deb
 
       - name: Сканирование контейнера
         id: trivy_scan
