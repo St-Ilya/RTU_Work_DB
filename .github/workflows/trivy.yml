@@ -1,4 +1,4 @@
-name: CI
+name: Trivy Dependency Scan
 
 on:
   push:
@@ -10,24 +10,41 @@ on:
 
 jobs:
   trivy:
-    name: Запуск Trivy для сканирования уязвимостей
     runs-on: ubuntu-latest
 
     steps:
-      - name: Проверка исходного кода
-        uses: actions/checkout@v3
-
-      - name: Установка Trivy
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+                  
+      - name: Install Erlang
         run: |
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.39.1/trivy_0.39.1_Linux-64bit.deb
+          sudo apt-get update
+          sudo apt-get install -y erlang
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.39.1_Linux-64bit.deb
           sudo dpkg -i trivy_0.39.1_Linux-64bit.deb
 
-      - name: Сканирование контейнера
-        id: trivy_scan
+      - name: Run Trivy scan
         run: |
-          trivy image --exit-code 0 --severity HIGH,CRITICAL --format sarif --output trivy_report.sarif <ваш_образ_или_контейнер>
-        
-      - name: Загружать отчет SARIF в GitHub
+          # Сканирование проекта Java
+          trivy fs --format sarif --output trivy-report-java.sarif .
+
+          # Сканирование проекта Erlang
+          # Предположим, что ваш проект использует rebar3 для управления зависимостями
+          rebar3 compile
+          trivy fs --format sarif --output trivy-report-erlang.sarif .
+
+      - name: Upload SARIF report
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: trivy_report.sarif
+          sarif_file: |
+            trivy-report-java.sarif
+            trivy-report-erlang.sarif
