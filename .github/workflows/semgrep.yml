@@ -1,8 +1,6 @@
 name: Run Semgrep
 on:
-  pull_request:
-    branches:
-      - '*'
+  workflow_call:
 
 jobs:
   semgrep:
@@ -20,9 +18,9 @@ jobs:
             --sarif --output semgrep.sarif \
             --metrics=off \
             --config="p/default"
-      
+
       - name: Save report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: semgrep.sarif
           path: semgrep.sarif
