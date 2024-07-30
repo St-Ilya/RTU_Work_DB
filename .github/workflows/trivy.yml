@@ -3,10 +3,10 @@ name: Trivy
 on:
   push:
     branches:
-      - main
+      - '*'
   pull_request:
     branches:
-      - main
+      - '*'
 
 ## GITHUB_TOKEN authentication, add only if you're not going to use a PAT
 permissions:
